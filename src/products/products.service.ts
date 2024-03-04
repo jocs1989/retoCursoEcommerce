@@ -1,13 +1,9 @@
-import { PaginationQuery } from 'src/common/dto/paginationQuery';
 import { DataSource, Repository } from 'typeorm';
 
-import {
-  ConflictException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 
+import { PaginationQuery } from '../common/dto/paginationQuery';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { Product } from './entities/product.entity';

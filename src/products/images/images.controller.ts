@@ -1,34 +1,50 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { ImagesService } from './images.service';
+import { Body, Controller, Delete, Get, Param, ParseUUIDPipe, Patch, Post } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
+
 import { CreateImageDto } from './dto/create-image.dto';
 import { UpdateImageDto } from './dto/update-image.dto';
+import { ImagesService } from './images.service';
 
+@ApiTags('images')
 @Controller('images')
 export class ImagesController {
   constructor(private readonly imagesService: ImagesService) {}
 
-  @Post()
-  create(@Body() createImageDto: CreateImageDto) {
-    return this.imagesService.create(createImageDto);
-  }
-
-  @Get()
-  findAll() {
-    return this.imagesService.findAll();
+  @Post(':id')
+  create(
+    @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
+    @Body() createImageDto: CreateImageDto,
+  ) {
+    return this.imagesService.create(id, createImageDto);
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.imagesService.findOne(+id);
+  findAll(@Param('id', new ParseUUIDPipe({ version: '4' })) id: string) {
+    return this.imagesService.findAll(id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateImageDto: UpdateImageDto) {
-    return this.imagesService.update(+id, updateImageDto);
+  @Get(':id/:idImg')
+  findOne(
+    @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
+    @Param('idImg', new ParseUUIDPipe({ version: '4' })) idImg: string,
+  ) {
+    return this.imagesService.findOne(id, idImg);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.imagesService.remove(+id);
+  @Patch(':id/:idImg')
+  update(
+    @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
+    @Param('idImg', new ParseUUIDPipe({ version: '4' })) idImg: string,
+    @Body() updateImageDto: UpdateImageDto,
+  ) {
+    return this.imagesService.update(id, idImg, updateImageDto);
+  }
+
+  @Delete(':id/:idImg')
+  remove(
+    @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
+    @Param('idImg', new ParseUUIDPipe({ version: '4' })) idImg: string,
+  ) {
+    return this.imagesService.remove(id, idImg);
   }
 }
