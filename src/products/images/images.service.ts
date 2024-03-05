@@ -1,3 +1,4 @@
+import { IdDto } from 'src/common/dto/id-product.dto';
 import { Repository } from 'typeorm';
 
 import { Injectable, NotFoundException } from '@nestjs/common';
@@ -5,6 +6,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 
 import { Product } from '../entities/product.entity';
 import { CreateImageDto } from './dto/create-image.dto';
+import { IdImgDto } from './dto/id-image.dto';
 import { UpdateImageDto } from './dto/update-image.dto';
 import { Image } from './entities/image.entity';
 
@@ -16,7 +18,8 @@ export class ImagesService {
     @InjectRepository(Image)
     private readonly imageRepository: Repository<Image>,
   ) {}
-  async create(id: string, createImageDto: CreateImageDto) {
+  async create(idDto: IdDto, createImageDto: CreateImageDto) {
+    const { id } = idDto;
     const imageProduct = await this.imageRepository.findOne({
       where: { products: { id } },
       relations: { products: true },
@@ -34,7 +37,9 @@ export class ImagesService {
     return await this.imageRepository.save(img);
   }
 
-  async findAll(id: string) {
+  async findAll(idDto: IdDto) {
+    const { id } = idDto;
+
     const imageProduct = await this.productRepository.findOne({
       where: { id },
       relations: ['images'],
@@ -45,7 +50,9 @@ export class ImagesService {
     return imageProduct.images;
   }
 
-  async findOne(id: string, idImg: string) {
+  async findOne(idDto: IdDto, idImgDto: IdImgDto) {
+    const { id } = idDto;
+    const { idImg } = idImgDto;
     const imgProduct = await this.imageRepository.findOne({
       where: {
         products: { id },
@@ -58,7 +65,13 @@ export class ImagesService {
     return imgProduct;
   }
 
-  async update(id: string, idImg: string, updateImageDto: UpdateImageDto) {
+  async update(
+    idDto: IdDto,
+    idImgDto: IdImgDto,
+    updateImageDto: UpdateImageDto,
+  ) {
+    const { id } = idDto;
+    const { idImg } = idImgDto;
     const imageProduct = await this.imageRepository.preload({
       products: { id },
       id: idImg,
@@ -71,7 +84,9 @@ export class ImagesService {
     return imageProduct;
   }
 
-  async remove(id: string, idImg: string) {
+  async remove(idDto: IdDto, idImgDto: IdImgDto) {
+    const { id } = idDto;
+    const { idImg } = idImgDto;
     const imagesDelete = await this.imageRepository.findOne({
       where: {
         products: { id },
