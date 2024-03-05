@@ -12,16 +12,7 @@ services:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_DB: ${POSTGRES_DB}
 
-  psql-testing:
-    image: postgres
-    container_name: psql-testing
-    restart: always
-    ports:
-      - ${POSTGRES_PORT_PC_TESTING}:${POSTGRES_PORT_CONTAINER_TESTING}
-    environment:
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD_TESTING}
-      POSTGRES_USER: ${POSTGRES_USER_TESTING}
-      POSTGRES_DB: ${POSTGRES_DB_TESTING}
+  
       
   pgadmin4:
     image: dpage/pgadmin4

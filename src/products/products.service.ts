@@ -1,9 +1,10 @@
+import { IdDto } from 'src/common/dto/id-product.dto';
 import { DataSource, Repository } from 'typeorm';
 
 import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 
-import { PaginationQuery } from '../common/dto/paginationQuery';
+import { PaginationQuery } from '../common/dto/query.dto';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { Product } from './entities/product.entity';
@@ -44,7 +45,8 @@ export class ProductsService {
     });
   }
 
-  async findOne(id: string): Promise<Product> {
+  async findOne(idDto: IdDto): Promise<Product> {
+    const { id } = idDto;
     const product = await this.productRepository.findOne({
       where: { id },
       relations: { images: true },
@@ -55,7 +57,8 @@ export class ProductsService {
     return product;
   }
 
-  async update(id: string, updateProductDto: UpdateProductDto) {
+  async update(idDto: IdDto, updateProductDto: UpdateProductDto) {
+    const { id } = idDto;
     const { images, ...allProducts } = updateProductDto;
 
     const product = await this.productRepository.preload({
@@ -100,7 +103,8 @@ export class ProductsService {
     }
   }
 
-  async remove(id: string): Promise<Product> {
+  async remove(idDto: IdDto): Promise<Product> {
+    const { id } = idDto;
     const product = await this.productRepository.findOne({
       where: { id },
       relations: { images: true },
