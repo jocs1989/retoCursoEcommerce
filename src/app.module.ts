@@ -10,6 +10,7 @@ import { conf } from './config/config';
 import { configBD } from './config/db.config';
 import { TypeOrmConfigService } from './config/typeorm.config';
 import { ProductsModule } from './products/products.module';
+import { IamModule } from './iam/iam.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { ProductsModule } from './products/products.module';
       useClass: TypeOrmConfigService,
     }),
     ProductsModule,
+    IamModule,
   ],
   controllers: [AppController],
   providers: [AppService],
