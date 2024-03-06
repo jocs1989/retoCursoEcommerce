@@ -1,5 +1,5 @@
 export const conf = {
-  developer: '.env.dev',
+  development: '.env.dev',
   testing: '.env.test',
   production: '.env.prod',
 };
