@@ -1,12 +1,7 @@
 import { IdDto } from 'src/common/dto/id-product.dto';
 
-import {
-    Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, ParseUUIDPipe, Patch, Post, Query
-} from '@nestjs/common';
-import {
-    ApiBody, ApiConflictResponse, ApiCreatedResponse, ApiNotFoundResponse, ApiOperation,
-    ApiResponse, ApiTags
-} from '@nestjs/swagger';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query } from '@nestjs/common';
+import { ApiBody, ApiCreatedResponse, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 import { PaginationQuery } from '../common/dto/query.dto';
 import { CreateProductDto } from './dto/create-product.dto';

@@ -1,6 +1,7 @@
 import { Repository } from 'typeorm';
 
 import { ConflictException, Injectable } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 
 import { SignInDto } from './dto/sing-in.dto';
@@ -14,6 +15,7 @@ export class AuthenticationService {
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
     private readonly hashingService: HashingService,
+    private readonly jwtService: JwtService,
   ) {}
   async signUp(signUpDto: SignUpDto) {
     try {
@@ -31,7 +33,35 @@ export class AuthenticationService {
     }
   }
 
-  signIn(signInDto: SignInDto) {
-    return signInDto;
+  async signIn(signInDto: SignInDto) {
+    const { email, password } = signInDto;
+    const user = await this.userRepository.findOne({
+      where: { email },
+      select: {
+        id: true,
+        password: true,
+        roles: true,
+        isActive: true,
+      },
+    });
+    if (!user) throw new ConflictException('This user not exist');
+    if (!user.isActive) {
+      throw new ConflictException('Communicate with administrator');
+    }
+    const isValid = await this.hashingService.compare(password, user.password);
+    if (!isValid) {
+      throw new ConflictException('Password and User incorrect');
+    }
+
+    return this.generateToken(user);
+  }
+
+  private async generateToken(user: User) {
+    delete user.password;
+
+    const payload = { sub: user.id, roles: user.roles };
+    return {
+      access_token: await this.jwtService.signAsync(payload),
+    };
   }
 }
