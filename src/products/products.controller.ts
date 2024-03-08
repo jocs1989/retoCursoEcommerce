@@ -1,9 +1,12 @@
 import { IdDto } from 'src/common/dto/id-product.dto';
+import { Public } from 'src/iam/authentication/decorator/public.decorator';
+import { Roles } from 'src/iam/authentication/decorator/roles.decorator';
 
 import { Body, Controller, Delete, Get, Param, Patch, Post, Query } from '@nestjs/common';
 import { ApiBody, ApiCreatedResponse, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 import { PaginationQuery } from '../common/dto/query.dto';
+import { RoleType } from '../iam/authentication/enums/roles-type.enums';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { Product } from './entities/product.entity';
@@ -31,7 +34,8 @@ export class ProductsController {
   create(@Body() createProductDto: CreateProductDto) {
     return this.productsService.create(createProductDto);
   }
-
+  //@Public() //solo pàra testear
+  @Roles(RoleType.USER)
   @Get()
   @ApiOperation({ summary: 'List of products' })
   findAll(@Query() paginationQuery: PaginationQuery) {

@@ -10,6 +10,7 @@ import { AuthenticationController } from './authentication/authentication.contro
 import { AuthenticationService } from './authentication/authentication.service';
 import { User } from './authentication/entities/user.entity';
 import { AuthGuard } from './authentication/guards/auth/auth.guard';
+import { UserRolesGuard } from './authentication/guards/user-roles/user-roles.guard';
 import { BcryptService } from './authentication/hashing/bcrypt.service';
 import { HashingService } from './authentication/hashing/hashing.service';
 
@@ -26,6 +27,10 @@ import { HashingService } from './authentication/hashing/hashing.service';
     {
       provide: APP_GUARD,
       useClass: AuthGuard,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: UserRolesGuard,
     },
   ],
 })
